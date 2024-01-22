@@ -82,6 +82,7 @@ namespace CroppingImageLibrary.Services
 
             _cropTool.Redraw(0, 0, 0, 0);
             this._adornedElement = adornedElement;
+            _canvas.Visibility = Visibility.Hidden;
         }
 
         public CropArea GetCroppedArea() =>
@@ -94,6 +95,10 @@ namespace CroppingImageLibrary.Services
         {
             _canvas.ReleaseMouseCapture();
             _currentToolState = _completeState;
+            if(_cropTool.Width == 0 || _cropTool.Height == 0)
+            {
+                _canvas.Visibility = Visibility.Hidden;
+            }            
         }
 
         private void AdornerOnMouseMove(object sender, MouseEventArgs e)
@@ -102,6 +107,7 @@ namespace CroppingImageLibrary.Services
             var newPosition = _currentToolState.OnMouseMove(point);
             if (newPosition.HasValue)
             {
+                _canvas.Visibility = Visibility.Visible;
                 _cropTool.Redraw(newPosition.Value.Left, newPosition.Value.Top, newPosition.Value.Width, newPosition.Value.Height);
             }
         }
@@ -110,10 +116,11 @@ namespace CroppingImageLibrary.Services
         {
             _canvas.CaptureMouse();
             var point = e.GetPosition(_canvas);
-            var touch = GetTouchPoint(point);
+            var touch = GetTouchPoint(point);          
             if (touch == TouchPoint.OutsideRectangle)
             {
                 _currentToolState = _createState;
+                _canvas.Visibility = Visibility.Visible;
             }
             else if (touch == TouchPoint.InsideRectangle)
             {
@@ -137,6 +144,11 @@ namespace CroppingImageLibrary.Services
             _canvas.IsEnabled = isEnabled;
             _cropAdorner.Visibility = isEnabled ? Visibility.Visible : Visibility.Hidden;
             _cropAdorner.IsEnabled = isEnabled;
+        }
+
+        public void SetVisibility(bool isEnabled)
+        {
+            _canvas.Visibility = isEnabled ? Visibility.Visible : Visibility.Hidden;
         }
 
         private TouchPoint GetTouchPoint(Point mousePoint)

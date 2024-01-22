@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid x:Name="RootGrid" MouseLeftButtonDown="RootGrid_OnMouseLeftButtonDown" MouseLeftButtonUp="RootGrid_MouseLeftButtonUp" Loaded="RootGrid_Loaded">
-        <Border Background="LightBlue">
+        <Border Background="Transparent">
             <Image x:Name="SourceImage"
                    Stretch="Uniform" 
                    SizeChanged="SourceImage_SizeChanged"
